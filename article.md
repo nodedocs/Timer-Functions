@@ -2,8 +2,10 @@
 
 There are two built-in timer functions, `setTimeout` and `setInterval`, which can be used to call a function at a later time. For an example usage:
 
-    setTimeout(function() { console.log("setTimeout: It's been one second!"); }, 1000);
-    setInterval(function() { console.log("setInterval: It's been one second!"); }, 1000);
+```javascript
+setTimeout(function() { console.log("setTimeout: It's been one second!"); }, 1000);
+setInterval(function() { console.log("setInterval: It's been one second!"); }, 1000);
+```
 
 An example output is:
 
@@ -18,27 +20,31 @@ As you can see the parameters to both are the same. The number second paramter s
 
 Typically you want to be careful with `setInterval` because it can cause some undesireable effects.  If, for example, you wanted to make sure your server was up by pinging it every second, you might think to try something like this:
 
-    setInterval(ping, 1000);
+```javascript
+setInterval(ping, 1000);
+```
 
 This can cause problems, however, if your server is slow and it takes, say, 3 seconds to respond to the first request. In the time it takes to get back the response, you would have sent off 3 more requests - not exactly desirable!  This isn't the end of the world when serving small static files, but if you doing an expensive operation such as database query or any complicated computation this can have some undesirable results. A common solution looks like this:
 
-    function myAsyncFunction (callback) {
-      // does some IO and then calls callback
-      // ...
-    }
+```javascript
+function myAsyncFunction (callback) {
+  // does some IO and then calls callback
+  // ...
+}
 
-    function recursive () {
-        console.log("It has been one second!");
+function recursive () {
+    console.log("It has been one second!");
 
-        myAsyncFunction(function() {
+    myAsyncFunction(function() {
 
-          console.log('asynchronous function is done, can activate timeout again');
+        console.log('asynchronous function is done, can activate timeout again');
 
-          setTimeout(recursive,1000);
-        });
+        setTimeout(recursive,1000);
+    });
 
-    }
-    recursive();
+}
+recursive();
+```
 
 As you can see, it makes a call to the `recursive` function which, as it completes, makes a call to `setTimeout(recursive, 1000)` which makes it call `recursive` again in 1 second - but only after the asynchronous I/O function we called (`myAsyncFunction`) has ended.
 
@@ -46,15 +52,17 @@ As you can see, it makes a call to the `recursive` function which, as it complet
 
 You can clear the timers you set with `clearTimeout` and `clearInterval`. Their usages are very simple:
 
-    function never_call () {
-      console.log("You should never call this function");
-    }
+```javascript
+function never_call () {
+  console.log("You should never call this function");
+}
 
-    var id1 = setTimeout(never_call,1000);
-    var id2 = setInterval(never_call,1000);
+var id1 = setTimeout(never_call,1000);
+var id2 = setInterval(never_call,1000);
 
-    clearTimeout(id1);
-    clearInterval(id2);
+clearTimeout(id1);
+clearInterval(id2);
+```
 
 So if you keep track of the return values of the timers, you can easily unhook the timers. 
 
@@ -62,9 +70,10 @@ So if you keep track of the return values of the timers, you can easily unhook t
 
 The final trick for the timer objects is you can pass parameters to the callback by passing more parameters to setTimeout and setInterval:
 
-    setTimeout(console.log, 1000, "This", "has", 4, "parameters");
-    setInterval(console.log, 1000, "This only has one");
-
+```javascript
+setTimeout(console.log, 1000, "This", "has", 4, "parameters");
+setInterval(console.log, 1000, "This only has one");
+```
 
     This has 4 parameters
     This only has one
